@@ -1,0 +1,14 @@
+page.title=GWSOmega, the better backwards compat library
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>ActionbarSherlock and HoloEverywhere are nice but do you know there is a
+less heavy-weight way? </p>
+
+<p>Find out <a href="{@docRoot}about/why.html">Why GWSOmega</a> was created.</p>
+
+<p>Find out <a href="{@docRoot}about/who.html">Who uses GWSOmega</a>.</p>
+
+<p>Find out <a href="{@docRoot}about/contributes.html">Who contributes to GWSOmega</a>.</p>

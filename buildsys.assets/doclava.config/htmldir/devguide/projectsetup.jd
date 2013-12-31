@@ -1,0 +1,22 @@
+page.title=ProjectSetUp
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<h3>Git</h3>
+<p>Obviously, the project uses git. If you are brand new to git, you will find 
+the git REDBook here useful. Also, read your git hosting providers git help pages and 
+once you git installed you can than clone the repo down to your PC using your IDE.</p>
+<h3>Apache ANT</h3>
+<p>We use Apache ANT and that means that you need to have Apache ANT installed and 
+you need to setup a small local.properties file that resides in your copy of the project 
+and never gets added to the repo and points, in this case to the location of your JDK tools.jar 
+as defined in an ant property called tool.jar in the local.properties file.</p>
+<h3>IDE</h3>
+<p>Each IDE is different but generally its a git import and than walk through your IDE 
+dialogs to setup the project in your IDE's workspace. If using Eclipse 
+you will want to set it up so that the cloned imported project is stored 
+on your git folder rather than the workspace folder(its the way Eclipse has implemented git 
+other wise you get extra folders when committing upstream to the 
+git host provider. </p>

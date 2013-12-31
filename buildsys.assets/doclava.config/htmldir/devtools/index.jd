@@ -1,0 +1,17 @@
+page.title=DevTools
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>The general tools for this project used as a modern IDE, apache ant for the 
+build, and git.  At bare minimum you need Apache ANT to build this project along with of course 
+an install of the JDK.</p>
+<p>Some acceptable IDEs are:
+<ul>
+<li>Eclipse</li>
+<li>NetBeans</li>
+<li>IntelliJ</li>
+</ul>
+
+I have used all three but prefer Eclipse.</p>

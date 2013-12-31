@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[%d{ISO8601}] [%-5p] %c - %mdc{.location}: %m%n%ex{3}</pattern>
+    </encoder>
+  </appender>
+  <appender name="TICKS" class="ch.qos.logback.core.ConsoleAppender">
+  <layout class="ch.qos.logback.classic.PatternLayout">
+    <Pattern>%mdc{.project }{.location}{.target}{.task}: %m%n</Pattern>
+  </layout>
+  <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+    <level>INFO</level>
+  </filter>
+</appender>
+  
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+</configuration>
+
+<!-- $Id: logback.xml 1304 2011-10-22 11:53:47Z ssmc $ -->

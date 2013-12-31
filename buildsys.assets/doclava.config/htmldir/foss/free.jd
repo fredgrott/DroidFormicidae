@@ -1,0 +1,16 @@
+page.title=FreeSource
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>Free Source was first coined and defined by RMS to mean that in giving away source 
+we also grant the receiver the same code modifications rights we have that is they are 
+free ot modify it in anyway as long as the modifications also are released under the 
+same copyrights license rights grant.</p>
+<p>While Free Source and Open Source differ on philosophy grounds generally GPLv3 and 
+APLv2 are compatible with each other as far as using libs licensed both ways, but there 
+are some differences pertaining to what constitutes links to libraries, etc depending 
+upon what computer language you are using so its always best to check with both 
+camps when mixing libraries with both licenses.</p>
+<p>Main site for Free Source is FSF(FreeSourceFoundation).</p>

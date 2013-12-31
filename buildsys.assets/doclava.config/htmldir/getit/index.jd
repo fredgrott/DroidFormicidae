@@ -1,0 +1,8 @@
+page.title=GetIt
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>There are two ways to use this, both as a jar and by building source. You find both detailed in 
+left side page links.</p>

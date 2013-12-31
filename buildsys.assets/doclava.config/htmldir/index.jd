@@ -1,0 +1,58 @@
+fullpage=true
+no_footer_links=true
+carousel=true
+page.metaDescription=The Official Project Site for GWSDroidLava.
+@jd:body
+
+<div class="wrap">
+    <!-- Slideshow -->
+    <div class="slideshow-container slideshow-home col-16">
+        <a href="" class="slideshow-prev">Prev</a>
+        <a href="" class="slideshow-next">Next</a>
+        <div class="frame">
+            <ul>
+                <li class="item carousel-home">
+                    <div class="content-left col-9">
+                        <img src="{@docRoot}images/home/doclavajavadoc.png" >
+                    </div>
+                    <div class="content-right col-6">
+                    <h1>GWSOmega</h1>
+                    <p>Compat library for android application development 
+                    to develop backwards compatible applications using 
+                    actionbar compat and other components.</p>
+                    <p><a href="{@docRoot}getit/projectlibrary.html" class="button">Get the jar</a></p>
+                    </div>
+                </li>
+                <li class="item carousel-home">
+                    <div class="content-left col-10">
+                        <img src="{@docRoot}images/home/aosp_style.png" style="margin-top:30px">
+                    </div>
+                    <div class="content-right col-5">
+                    <h1>Make your Android Application<br>look great</h1>
+                    <p>HoloStyle Apps with less developer headaches</p>
+                    <p><a href="{@docRoot}usage/index.html" class="button">Learn More</a></p>
+                    </div>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+    <!-- /End slideshow -->
+    
+ </div>
+<div class="wrap" style="padding-bottom:20px">
+    <!-- Section links -->
+    <div class="home-sections">
+        <ul>
+            <li><a href="{@docRoot}about/index.html">GWSOmega</a></li>
+            
+            <li><a href="{@docRoot}foss/index.html">FOSS</a></li>
+            <li><a href="{@docRoot}support.html">Support</a></li>
+            <li><a href="{@docRoot}legal.html">Legal</a></li>
+            <li class="last"><a href="{@docRoot}license.html">License</a></li>
+        </ul>
+    </div>
+    <!-- /Section links -->
+</div>     
+ 

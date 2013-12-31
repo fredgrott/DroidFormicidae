@@ -1,0 +1,8 @@
+#-----------------------------------------------------------------------
+# JWare software build information.
+# Copyright (c) 2002-2012 Sandbox Software MC. All Rights Reserved.
+#-----------------------------------------------------------------------
+Release: JWare AntXtras/Foundation 3.5.0b2, Sep-25-2012
+Build Id: 3.5.0b2-build1516.53
+Build Time: 20120925T092941-0400
+Builder: ssmc

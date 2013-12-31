@@ -1,0 +1,33 @@
+page.title=LookAtTheSource
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>So Use the Source Luke, is not the most daring battle cry but its
+how we understand and get power to do neat stuff. There are two ways to 
+view source.</p>
+<p>Instead of making everyone download the full AOSP source we use the 
+Android Source Browser Test site instead and just go to the locations we need:
+
+<code>
+platform-frameworks-base
+           docs/html   this is the jd templates, the htmldir if you will
+platform-build
+          tools/droiddoc/templates-sdk this is the cs templates, the templatesdir
+</code>
+
+And if that is too big to grasp than view my source:
+
+<code>
+     projectroot/
+           gwsdroidlava.assets/
+                      gwsdroidlavadocs/
+                           htmldir
+                           assets/
+                              templates
+</code>
+
+
+
+</p>

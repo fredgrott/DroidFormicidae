@@ -1,0 +1,14 @@
+page.title=Usage
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>So you  want to use GWSDroidLava to document your project including 
+your javadocs and do not know how to begin. Well this is the place to be
+for that task.  If you are new to the original DocLava project and 
+clearsilver templating macros and commands you will want to visit the 
+<a href="{@docRoot}usage/starting.html">left link getting started</a>.</p>
+<p>If you are very familiar with both the original project DocLava and 
+clearsilver macros and commands you will want to visit the advanced page 
+links to your left.</p>

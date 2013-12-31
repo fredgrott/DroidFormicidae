@@ -1,0 +1,29 @@
+page.title=CustomMasthead
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>Okay, so lets walk through an example. This is the original 
+masterhead.cs template stuff:
+<code>
+
+</code>
+
+all it is doing is using some cs macro calls to place the api filter and 
+search box in the header.
+</p>
+<p>But its not feature rich as it has no project website menus. Basically, we 
+can add stuff to customizations.cs for the menus and than call it in our
+masthead.cs such as:
+
+<code>
+
+</code>
+
+That gives us three menus the first menu, the expanded menu, and the secodnary menu 
+that the AOSP developer site features. By exploring the source and comparing it to the 
+produced output you can dissect all these neat features and add them ot your 
+project website.
+
+</p>

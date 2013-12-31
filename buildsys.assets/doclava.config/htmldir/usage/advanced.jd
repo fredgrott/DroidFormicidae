@@ -1,0 +1,18 @@
+page.title=Advanced
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>To customize the templates that render the project web site and the 
+javadocs you will have to learn some basics about ClearSilver:
+
+<ul>
+  <li><a href="http://www.clearsilver.net/docs/man_templates.hdf">template commands</a></li>
+  <li><a href="http://www.clearsilver.net/docs/man_expressions.hdf">Expressions</a</li>
+  <li><a href="http://www.clearsilver.net/docs/man_macros.hdf">Macros</a></li>
+  <li><a href="http://www.clearsilver.net/docs/man_filters.hdf">functions</a></li>
+</ul>
+You can step through some examples and explanation at the left menu.
+
+</p>

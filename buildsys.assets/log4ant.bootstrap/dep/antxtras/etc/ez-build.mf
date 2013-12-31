@@ -1,0 +1,7 @@
+Built-By: ssmc
+Specification-Title: JWare AntXtras/Foundation
+Specification-Version: 3.5.0
+Specification-Vendor: Sandbox Software MC (SSMC)
+Implementation-Title: JWare AntXtras/Foundation 3.5.0b2, Sep-25-2012
+Implementation-Version: 3.5.0
+Implementation-Vendor: Sandbox Software MC (SSMC)

@@ -1,0 +1,11 @@
+page.title=Develop
+fullpage=1
+@jd:body
+
+<div class="wrap" style="width:940px;">
+  <h1>Develop</h1>
+<p>In the develop hub you will find the codeqa of the project, devguide, and 
+devtools, and of course the javadocs(reference).</p>
+
+
+</div>

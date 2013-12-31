@@ -1,0 +1,12 @@
+# we usually like to use src as default
+source.dir=
+# we use bin as default
+out.dir=
+company.url=
+company.name=
+copyright.years=
+# format is vVersionNumber-rRevisionNumber
+android.support.version=v4-r19
+
+
+

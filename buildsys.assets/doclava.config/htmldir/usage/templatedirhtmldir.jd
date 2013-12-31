@@ -1,0 +1,52 @@
+page.title=TemplatedirHtmldir
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>You may have noticed that if you leave off the templatedir and htmldir 
+parameters of the doclet you get just a plain old javadoc generation with 
+no embeds in the a project website. So lets explain that relationship</p>
+
+<h3>Html folder</h3>
+<p>First do not confuse the html folder with the htmldir folder. The html folder 
+just contains one html file that refresh redirects to the packages.html file 
+in the  javadocs in the reference subfolder of the output.</p>
+<h3>Htmldir folder</h3>
+<p>The htmldir folder is the folder where you will put your jd templates 
+composing your project website that clearsilver uses to render yor project 
+website. The jd templates can contain cs properties, javadoc variables, and 
+all the normal html/css/js stuff.</p>
+<h3>Templatedir folder </h3>
+<p>The templatedir folder contains all the assets  clearsilver moves to the 
+assets folder at the root of the output folder, and the component cs templates and 
+the main cs tempaltes. In other words the doclet uses clearsilver to 
+process and act upon the commands, variables, etc in the cs templates in the 
+tempaltesdir folder.</p>
+<h3>General Project Site Rendering Assets Layout</h3>
+<p>
+<code>
+ gwsdroidlava.assets/
+        gwsdroidlavadocs/
+             assets/
+                html/
+                   index.html       (the default html that reloads the packages.html page if you do not override it)
+                templates/
+                    assets/
+                       images/
+                       css and js stuff here
+                    components/
+                      api_filters.cs
+                      left_nav.cs
+                      masthead.cs
+                      search_box.cs
+                   other cs files
+                
+                
+             htmldir/
+                ourstuff goes here   
+           
+</code>
+
+Lets look at an example.
+</p>

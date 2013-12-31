@@ -1,0 +1,302 @@
+                        JWare/AntXtras Foundation
+                    Version 3.5.0b2, Release Sep 2012
+                   -----------------------------------
+
+
+This document contains the major AntXtras version change notes. For the most
+recent information, visit the website at http://antxtras.sourceforge.net/.
+
+------------------------------------------------------------------------------
+This version of AntXtras is the latest development version in the v3 series.
+There are some incompatible internal packaging and source changes in 3.5.x 
+that can cause some breaks in 3.0.x scripts; these changes are marked clearly 
+below. AntXtras 3.5.x is still based on Ant 1.8.x and JRE 1.5 and like 3.0.x,
+is not compatible with either Ant 1.6.x or Ant 1.7.x.
+
+
+CHANGES IN 3.5.0b2:
+-------------------
+
+=> [BREAKING CHANGE] The 'pathlist' loop control has been removed from
+   the <doforeach> and <callforeach> tasksets. Use 'path' instead. [FS#151]
+
+
+=> Fixed issue with <callforeach> where setting passthru to "properties"
+   or "references" was not exclusive.  [FS#285]
+
+
+=> AntXtras now "stringifies" simple Ant resources as expected especially
+   when you use the $ref: function shortcut. The final string is whatever
+   the resource type returns as its string representation (instead of 
+   failing). This also fixes issues where references to resources failed
+   to match in conditions and <fixturecheck>. [FS#286]
+
+   EXAMPLE:
+     1: <string id="greeting" value="Hello Ant"/>
+        <url id="the_url" url="http://ant.apache.org/"/>
+        <file id="the_file" file="${ant.file}"/>
+
+        <tally trueproperty="all.matched">
+          <equals match="Hello Ant" reference="greeting"/>
+          <contains string="${$ref:the_url}" substring="apache"/>
+          <matches pattern=".*\.xml$" reference="the_file"/>
+        <tally>
+        <assert issettrue="all.matched"/>
+
+
+=> [BREAKING CHANGE] The <assert> task has been upgraded to support
+   namespace variants of shorthand dynamic conditions FIRST.  [FS#266]
+   
+   EXAMPLE:
+     1: <assert my:isset="DATE".../> is no longer treated the same as
+        <assert isset="DATE".../>
+
+
+=> [BREAKING CHANGE] The <assert> and <tally> tasks no longer have a 
+   builtin synonym <isalive> to mean <isreachable> for NESTED elements.
+   Use the standard Ant condition <isreachable> instead. [FS#151]
+
+
+=> [BREAKING CHANGE] The <assert> and <tally> tasks no longer have
+   builtin synonyms <socketalive> and <checksum> for NESTED elements. Use 
+   the standard Ant conditions <socket> and <checksum> instead. [FS#151]
+
+
+=> Added the $isalive: function shortcut for the Ant <isreachable>
+   condition. The new funcut is located in the advanced AntXtras 
+   function shortcuts antlib. The function shortcut format is like: 
+   '$isalive:<url|hostname>[?<timeout>'. [FS#281]
+
+
+=> The <do> taskset now supports inlined AntXtras condition names as 
+   shortcuts to the existing 'true' check. AntXtras condition funcuts
+   are also supported and you can combine conditions with an implicit
+   "and" logic. [FS#266]
+
+   EXAMPLES:
+     1: Instead of <do true="${$isdirectory:${docs.d}}">, you can use: 
+         <do isdirectory="${docs.d}">
+           [...work work work...]
+         </do>
+
+     2: Where you were limited to a single "true" test before, you can
+        now combine multiple conditions by name to do composite tests:
+         <do isfile="${dist.zip}" isalive="${uploads.ftp.url}?5">
+           [...work work work...]
+         </do>
+
+
+=> Refactored the $istype: (aka $istask:) function shortcut to use the
+   builtin Ant <typefound> condition for consistency in how a type is
+   determined to exist. [FS#281]
+
+
+=> Enhanced the $x:thrown family of function shortcuts to support an 
+   optional "?unmask" parameter. If you supply this parameter the funcut
+   will try to unmask the exception underlying the build exception. So 
+   for instance, if you have a task that fails due to an underlying
+   "java.io.FileNotFoundException", you can test/display this exception
+   specifically.
+ 
+   EXAMPLE:
+     1: <protect>
+          [work...work...work]
+          <iferror>
+            <show messageid="err.ftp" arg0="${ftp.url}"
+                  arg1="${$x:thrownfull?unmask}"/>
+          </iferror>
+        </protect>
+
+
+=> Enhanced the <ismatch> and <isequal> conditions to support nested
+   elements for their two values. This lets you define conditions
+   that can test for reserved characters (XML and/or regular expression
+   characters). [FS#267]
+
+   EXAMPLE:
+     1: <ismatch property="property_with_xml_and_re_special_chars">
+          <pattern>^<![CDATA[\^\^Illegal chars .* END\$\$]]>$</pattern>
+        </ismatch>
+
+
+=> Fixed the $default: function shortcut to remove the fallback value
+   parameter BEFORE checking the name against the builtin AntXtras
+   default properties. [FS#273]
+   
+   EXAMPLE:
+     1: Before the v3.5.0b2 fix this funcut request:
+        "$default:passwordfile?/my/secret/directory/" would not return
+        the right value if the password file default property was set
+        in your Ant environment; it would return "/my/secret/directory/"
+        always.
+
+
+=> Added the $gt:, $gte:, $lt:, and $lte: function shortcuts for access
+   to the <isnumber> condition options. Available in the advanced 
+   antlib. [FS#173]
+   
+   EXAMPLE:
+     1: <domatch value="${$lte:${MAX_ERR_COUNT},,${error_count}}">
+          <true>....
+          <otherwise>...
+        </domatch>
+
+
+=> Enhanced <capturelogs> to support a "maxchars" parameter. This lets
+   you limit the amount of data that Ant captures to its memory buffer.
+   Note that output stops getting appended at this threshold; there is no
+   overflow policy to support "scrolling" of the memory buffer. [FS#101]
+   
+   EXAMPLE:
+     1: <capturelogs maxchars="${10_K}" tofile="${logs}/work.log">
+           [work work work...]
+        </capturelogs>
+
+
+
+CHANGES IN 3.5.0b1:
+-------------------
+
+=> Rebuilt against Ant 1.8.4
+
+
+=> [BREAKING CHANGE] Our <isset> condition has been renamed <isdeclared>
+   to remove conflict with the standard Ant condition. You can still use
+   the $isset: function shortcut or the new '$isdeclared:' shortcut. Our
+   other isset-variation conditions are still named as they were in the
+   previous version: <isnotset>, <issettrue>, <allset>, etc. And the 
+   rule tasks like <assert> and <fixturecheck> still support <isset> as
+   a nested parameter for *our* version of isset condition. [FS#261]
+
+
+=> [BREAKING CHANGE] The following v2 and 3.0.x deprecated attributes
+   have been removed completely [FS#277]:
+     - The <fixturecheck> rule no longer supports the "msg" attribute;
+       use "message" instead.
+     - The <parameters> type no longer supports the "names" attribute; 
+       use "properties" instead.
+     - The <isantversion> condition no longer supports the "is" 
+       attribute; use "equal" instead.
+     - The <prefer> rule no longer supports the "checkbadsubst" 
+       attribute; use "malformed" instead.
+     - The <captureoutput> task no longer supports the "fromstream" 
+       attribute; use "from" instead.
+
+
+=> [BREAKING CHANGE] The following items have been moved to the advanced
+   AntXtras jar file (jw-antxtras-advanced.jar) [FS#151]:
+     - <messagesbundle>, <managemessages>, and the associated message
+       funcuts $string: and $message:.
+     - <stop>
+     - <batchchecks>
+     - <printerror>
+
+
+=> [BREAKING CHANGE] The following components have been updated to pay 
+   attention to the standard jware delimiter properties (list, pairs).
+   This is done to facilitate environments where you need to use
+   a value other than "," as the default list delimiter (for instance if
+   a lot of list element values that have ',' as part of their value or
+   the natural delimiter for lists being processed is something other
+   than ','). [FS#255]
+     - The <foreach> and <callforeach> tasks will use the property to
+       split inlined 'list' values. The <call> and <callinline> tasks
+       will use the property to split inlined 'targets' or 'macros' values.
+     - The <mkdirs> task will use the list property to split inlined
+       directory leaf 'names' as in: <mkdirs names="doc,bin,lib,etc"/>
+     - The <parameters> type will use property to split a list of
+       key-value pairs passed to its 'properties' attribute.
+     - The <printenv> task will use property to split the list of
+       values passed to its 'properties', 'references', and 'variables'
+       attributes.
+     - The <vendorinfo> task will use property to split the list of
+       properties named in the 'fields' attribute.
+     - All of the shorthand multi-set condition shortcuts; for example,
+       "${$noneset:first,second,third}" will look at the property to find
+       the delimiter used in the list "first,second,third".
+     - The $list: function shortcut will use the property to parse an
+       inlined list as in: 
+         <property name="mylist" value="a|b|c|d"/>
+        ...<echo message="List has ${$list:${mylist}?size} items"/>
+     - The <isolate> task will use the pairs property to split key-value
+       pairs set in its "resetfixture" attribute.
+
+
+=> Added option 'mkdirs' to <copylogged> that will automatically create
+   any missing directories for a named output file if set "true". Note
+   that if you use the 'tofile' option on the <capturelogs> task this
+   option is activated automatically for the capture as well. [FS#271]
+
+   EXAMPLE:
+     1: <copylogged tofile="${results.d}/system.log" mkdirs="yes"/>
+
+
+=> Added option 'headers' to <printenv> to let you omit the pre-canned
+   section headers that get added to output stream. Also fixed bug  
+   where headers not shown unless messageid defined. [FS#275]
+
+   EXAMPLE:
+     1: <printenv properties="all--" headers="off"
+            tofile="${log.d}/environ.properties"/>
+
+
+=> Added option 'isdefined' to the <fixturecheck> task so you can test
+   a property or macro attribute for non-empty. [FS#278]
+   
+   EXAMPLE:
+     1: <fixturecheck isdefined="@{step}"
+           message="parameter 'step' is defined"/>
+
+
+=> Fixed issue with recursive property expansion inside the <isolate>
+   taskset. [FS#222]
+
+
+=> Fixed various bugs related to nesting an <isolate> taskset with its
+   own <locals> in combination with Ant <local> feature. [FS#282]
+
+
+=> Fixed <assign> to automatically use the variable's name for a copy
+   property if that property's name is not defined or is assigned to
+   a positive boolean value (like 'yes'). [FS#276]
+
+   EXAMPLE:
+     1: <assign var="starttime" value="${$now:}" copyproperty="yes"/>
+     2: <assign var="starttime" value="${$now:}" copyproperty=""/>
+
+
+=> Added JWare property to control the default "quiet" setting of the
+   <iferror> taskset for <protect>. Before, this attribute was always
+   off and you had to specify an override for each use. Now you can
+   defined the jware.antxtras.defaults.iferror.feedback property with
+   the default setting.
+   
+   EXAMPLE:
+     1: Use 'ant -Djware.antxtras.defaults.iferror.feedback=quiet' to
+        prevent <iferror> from echoing the caught exception to the
+        Ant console.
+
+
+=> Enhanced <domatch> and its choice tasksets to understand "var" as a 
+   shortcut for "variable" in their attributes.
+
+   EXAMPLE:
+     1: <domatch var="testrunner">
+           ...
+
+
+=> Added two function shortcuts for the AntXtras <isequal> and <ismatch>
+   conditions. This lets you to do a quick equality test without having
+   to use a more complex nested script element.
+
+   EXAMPLE:
+     1: <do false="${$isequal:SUCCESS,,${build-status}}">
+           ...
+        </do>
+     2: <do true="${$ismatch:^junit.*$,,${$p:testrunner?none}}">
+           ...
+        </do>
+
+
+------------------------------------------------------------------------------
+-SSMC

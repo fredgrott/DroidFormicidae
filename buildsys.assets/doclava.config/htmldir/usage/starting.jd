@@ -1,0 +1,129 @@
+page.title=GettingStarted
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<h3>Using GWSDroidLava with Apache ANT</h3>
+<p>Some basic things to remember. One, you can refid a path reference in 
+a property ant definition and that is the preferred way to set the paths 
+that this doclet requires. Two, the JDK rt.jar can be referenced as its 
+required for this doclet by using the ANT sun.boot.class.path property.
+Three, to put more than one property on a doclet parameter line you will use the
+colon.</p>
+<p>So lets see how a basic setup might look:
+
+<code>
+<javadoc packagenames="com.google.*"
+                            destdir="bin/gwsdroidlavadocs"
+                            sourcepath="src"
+                            docletpath="${jar.file}"
+                            classpath="${project.libs}"
+                            bootclasspath="${sun.boot.class.path}">
+                        <doclet name="com.google.doclava.Doclava">
+                            <param name="-stubs" value="bin/stubs" />
+                            <param name="-templatedir"/>
+                            <param name="${template.dir}"/>
+                            <param name="-htmldir"/>
+                            <param name="${html.dir}"/>
+                            <param name="-hdf"/>
+                            <param name="project.name"/>
+                            <param name="${ant.project.name}" />
+                            
+                        </doclet>
+                    </javadoc>
+</code>
+
+</p>
+
+<p>For those that do not remember lets go over the <a href="http://ant.apache.org/manual/Tasks/javadoc.html">ANT javadoc task</a> basics:
+
+<ul>
+<li>Packagenames is a comma separated list</li>
+<li>distdir is the destination directory of our output</li>
+<li>sourcepath is our src directory</li>
+<li>docletpath is our path ot our doclet jar</li>
+<li>classpath gets used to put our libraries references</li>
+<li>bootclasspath is used to reference other classes needed, like rt.jar 
+and any java special environment jars such as android.jar for example</li>
+<li>In between the beginning javadoc and end javadoc tags is the doclet 
+tags and the GWSDroidLava parameters<li>
+</ul>
+ 
+</p>
+<p>we have two styles of GWSDroidLava parameters:
+
+<ul>
+<li>parameterName parameterValue</li>
+<li>-hdf parameterName parameterValue</li>
+
+The hdf one is a special one that inserts that name-value pair into the 
+hdf data that clearsilver reads in as data and uses as variable values. One 
+example of that use may be setting it as<code>-hdf javaTarget 6</code> so that 
+you can than have it output as a footer value in the footer.
+</p>
+
+<p>That is the general minimum basic set of GWSDroidLava parameters you need to 
+set. Templatedir is your template directory usually the path of yourdoctemplatesroot/assets/templates 
+variation. Htmldir is the html directory usually the path of yourdoctemplatesroot/htmldir
+variation.  
+</p>
+
+<p>One final note, if you are using a non Sun(Oracle) JDK JVM please refer to 
+their documentation to see what the bootclasspath property to use.</p>
+
+<h3>Using GWSDroidLava with Maven</h3>
+<p>Maven is similar: 
+
+<code>
+<project>
+  ...
+  <build>
+    <plugins>
+      ...
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <docletArtifact>
+            <groupId>com.google.doclava</groupId>
+            <artifactId>doclava</artifactId>
+            <version>1.0.5</version>
+          </docletArtifact>
+          <doclet>com.google.doclava.Doclava</doclet>
+          <!--
+            | bootclasspath required by Sun's JVM 
+          -->
+          <bootclasspath>${sun.boot.class.path}</bootclasspath>
+          <additionalparam>
+             -quiet
+             -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
+             -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
+             -hdf project.name "${project.name}"
+             -d ${project.build.directory}/apidocs
+           </additionalparam>
+          <useStandardDocletOptions>false</useStandardDocletOptions>
+          <!--
+            | Apple's JVM sometimes requires more memory
+          -->
+          <additionalJOption>-J-Xmx1024m</additionalJOption>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+</code>
+
+Some basic notes. One, I have not put this fork into a public maven repo yet, so 
+the artifactId and version will be the ones you supply when you add it to your own
+local maven repo. If you have project libraries you need to add the 
+classpath beginning and ending tags and classpath references to those libraries.
+</p>
+
+<p>One last thing, the GWSDroidLava doc templates in the gwsdroidlava.assets folder 
+are setup with the beginner in mind in that you can get away with just 
+changing the text and a few doclet parameters and the two png files of 
+company_logo and project_logo to reuse before you tackle more 
+advance stuff.</p>
+

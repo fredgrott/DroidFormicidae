@@ -1,0 +1,12 @@
+page.title=OpenSource
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>OpenSource was coined by ER and later defined by OSS organization to 
+mean that its open as far as one is always allowed to modify source but they do not always 
+have to give that modification back depending upon the license. While Free Source is 
+only a couple of licenses; GPLv2 LGPLv2, GLPv3 OSS is represented by 
+a lot more licenses such as MIT, BSD, Mozilla Public License, Apache License, etc.</p>
+<p>See the OSS org site for details. </p>

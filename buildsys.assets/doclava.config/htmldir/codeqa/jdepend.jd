@@ -1,0 +1,10 @@
+page.title=CodeQA-JDepend
+walkthru=0
+header.hide=0
+
+@jd:body
+
+
+
+<iframe src="jdependreport.html" style="width:1400px; height:1400px;"></iframe>
+<!-- div style here to handle the iframe of the JDepend report-->

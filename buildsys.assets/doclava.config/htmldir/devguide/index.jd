@@ -1,0 +1,9 @@
+page.title=DevGuide
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>Just a set of development guides to get you started using and modifying the 
+source of this project and hopefully you will become a code contributor to this 
+project in the future. Your journey begins at the left in order.</p>

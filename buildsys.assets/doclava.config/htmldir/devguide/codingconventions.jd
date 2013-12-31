@@ -1,0 +1,8 @@
+page.title=CodingConventions
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>We are using just the standard SUn Java Coding Conventions, generally that is the 
+default PMD and Checkstyle settings when you have those plugins installed.</p>

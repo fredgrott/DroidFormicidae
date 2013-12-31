@@ -1,0 +1,35 @@
+page.title=Template Types
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<
+<p>There are two basic templates in GWSDroidLava. One is the clearsilver 
+template with the extension of cs. The other template is the javadoc 
+template with the extension of jd.</p>
+
+<h3>ClearSilver</h3>
+
+<p>The ClearSilver template features are provided by the JSivler jar included 
+in GWSDroidLava. Basic full 100% compatibility with the ClearSivler 
+macros and calls. Those syntaxes and command page resources are:
+
+<ul>
+  <li><a href="http://www.clearsilver.net/docs/man_templates.hdf">template commands</a></li>
+  <li><a href="http://www.clearsilver.net/docs/man_expressions.hdf">Expressions</a</li>
+  <li><a href="http://www.clearsilver.net/docs/man_macros.hdf">Macros</a></li>
+  <li><a href="http://www.clearsilver.net/docs/man_filters.hdf">functions</a></li>
+</ul>
+
+JSilver provides a further inline directive syntax explained in the middle of this 
+<a href="http://code.google.com/p/jsilver/wiki/ClearSilverCompatibility">page</a>.
+
+</p>
+
+<h3>Javadoc</h3>
+<p>The other template type is javadoc. In the javadoc template only page properties 
+at the top and javadoc commands such as docroot are processed. One of the 
+main  properties you often put at the top is the command telling the 
+GWSDroidlava doclet that the body of content follows that clearsilver needs 
+to act upon in rendering the template to html.</p>

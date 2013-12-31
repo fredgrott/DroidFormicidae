@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<project name="demo" basedir="." default="main">
+  
+  <!--
+     | Initialize what we need to demonstrate various funcuts.
+     -->
+  <dirname property="root.d" file="${basedir}"/>
+  <path id="jware.path">
+    <fileset dir="${root.d}/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <taskdef resource="org/jwaresoftware/antxtras/install/antlib-advanced.xml"
+      classpathref="jware.path"/>
+
+  <tempdir pathproperty="TMP.dir" urlproperty="TMP.url"/>
+
+  <!--
+    | Don't throw any script-stopping errors (just a demo that can't expect setup)
+    -->
+  <property name="jware.antxtras.defaults.haltiferror.funcuts.flag" value="false"/>
+
+  <!--
+     | Starting recording the demo's duration. Used by our $duration funcut.
+     -->
+  <target name="begin">
+    <assign var="start" op="now" copyproperty="start"/>
+  </target>
+
+  <!-- 
+    | Reinsert the 'tstamp' datetime funcut that was removed in v2 series.
+    -->
+  <managefuncuts action="install">
+    <parameter name="tstamp"
+        value="org.jwaresoftware.antxtras.funcuts.datetime.DateTimeFunctionShortcut"/>
+  </managefuncuts>
+
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+
+  <!--
+    | The demo for our '$oslibext:' and '$osfamily:' info function shortcuts.
+    | @since JWare/AntXtras 2.0.0
+    | @since JWare/AntXtras 3.0.0 added call to $isos: funcut
+    -->
+  <target name="os"
+          description="Demo of the $oslibext:, $osfamily:, $system:, and $sysenv: funcuts">
+    <echo message="OS Family: ${$osfamily:},  General OS Family: ${$osfamily:general}"/>
+    <echo message="Is OS[windows]: ${$isos:windows}"/>
+    <echo message="Native library extension: ${$oslibext:ERROR}"/>
+    <echo message="System property(ANT_HOME): ${$system:ANT_HOME?UNKNOWN}"/>
+    <echo message="System environment(HOME): ${$sysenv:HOME?UNKNOWN}"/>
+  </target>
+
+  
+  <!--
+    | The demo for our '$vendorinfo:' info function shortcuts.
+    | @since JWare/AntXtras 3.0.0
+    -->
+  <target name="vendorinfo"
+          description="Demo of the $vendorinfo: funcut">
+    <echo message="AntXtras RELEASE: ${$vendorinfo:}"/>
+    <echo message="Long Version: ${$vendorinfo:antx?longversion}"/>
+    <echo message="Long Date: ${$vendorinfo:?longdate}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$x:' or '$fixture:' function shortcut.
+    | @since JWare/AntX 0.5
+    | @since JWare/AntXtras 3.0.0 added location info (not just iteration)
+    -->
+  <target name="fixture"
+          description="Demo of the $x: aka $fixture: function shortcut">
+    <echo message="Iteration ID: ${$x:cycle?id}"/>
+    <echo message="Iteration ClassName: ${$x:cycle?classname}"/>
+    <echo message="Iteration (A) Property: ${$x:cycle?property?Iteration.ITID}"/>
+    <echo message="Iteration (A) FuncutImpl($var:): ${$x:cycle?funcut?var}"/>
+    <echo message="Iteration (B) FuncutImpl($misinhandler): ${$x:cycle?funcut?misinhandler}"/>
+    <!-- -->
+    <echo message="Thread: ${$x:thread}"/>
+    <echo message="Project: ${$x:projectname}"/>
+    <echo message="Target: ${$x:targetname}"/>
+    <echo message="Location: ${$x:location}"/>
+    <echo message="Line: ${$x:line}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$default:' and '$defaultsproperty:' function shortcuts.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="defaults"
+          description="Demo of the $default: and $defaultsproperty: funcuts">
+    <echo message="Defaults ConfigId Property(none): ${$defaultsproperty:configid}"/>
+    <echo message="Defaults ConfigId: ${$default:configid}"/>
+    <echo message="Defaults Assertions Enabled Property: ${$defaultsproperty:assertions}"/>
+    <echo message="Defaults Assertions Enabled: ${$default:assertions}"/>
+    <echo message="Defaults Password File Property: ${$defaultsproperty:passwordfile}"/>
+    <echo message="Defaults Password File: ${$default:passwordfile}"/>
+    <echo message="Defaults HaltIfError(Funcuts) Property: ${$defaultsproperty:haltiferror.funcuts}"/>
+    <echo message="Defaults HaltIfError(Funcuts): ${$default:haltiferror.funcuts}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$truefalse:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+
+  <target name="truefalse"
+          description="Demo of the $truefalse: funcut">
+    <echo message="TF(true): ${$truefalse:true}"/>
+    <echo message="TF(false): ${$truefalse:false}"/>
+    <echo message="TF(YES): ${$truefalse:YES}"/>
+    <echo message="TF(TrUe,pass|fail): ${$truefalse:TrUe?PASS,,FAIL}"/>
+    <echo message="TF(ofF): ${$truefalse:ofF}"/>
+    <echo message="TF(no): ${$truefalse:no}"/>
+    <echo message="TF(1): ${$truefalse:1}"/>
+    <echo message="TF(0,pass|fail): ${$truefalse:0?PASS,,FAIL}"/>
+    
+    <echo message="TF(0,|doink): '${$truefalse:yes?,,doink}'"/>
+    <echo message="TF(no,happy|): '${$truefalse:no?happy,,}'"/>
+    <echo message="TF(yes,happy|): '${$truefalse:yes?happy,,}'"/>
+
+    <property name="v.0" value="0"/>
+    <echo message="TF(%{0}): ${$truefalse:${v.0}}"/>
+    <assign name="v.ON" value="ON"/>
+    <echo message="TF(v.ON): ${$var:v.ON|$truefalse:?okidoki,,bleech}"/>
+    <echo message="TF(%{v.ON},yes|no): ${$truefalse:${$var:v.ON}?yes,,no}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$not:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="not"
+          description="Demo of the $not: funcut">
+    <property name="p.no" value="off"/>
+    <assign var="v.yes" value="yes"/>
+    <assign var="v.999" value="999"/>
+
+    <echo message="Not('yes'): ${$not:yes}"/>
+    <echo message="Not(false-property): ${$not:${p.no}}"/>
+    <echo message="Not(false-property): ${$not:p.no?p}"/>
+    <echo message="Not(yes-var): ${$not:v.yes?var}"/>
+    <echo message="Not(Zero(v.999)): ${$var:v.999|$iszero:|$not:}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$iszero:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="iszero"
+          description="Demo of the $iszero: funcut">
+    <property name="p.0" value="0"/>
+    <assign var="v.999" value="999"/>
+    <assign var="v.0" value="0"/>
+    
+    <echo message="IsZero('999'): ${$iszero:999}"/>
+    <echo message="IsZero(p.0): ${$iszero:${p.0}}"/>
+    <echo message="Piped IsZero(p.0): ${$property:p.0|$iszero:}"/>
+    <echo message="IsZero(v.0): ${$var:v.0|$iszero:}"/>
+    <echo message="IsZero(v.999): ${$var:v.999|$iszero:}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$random:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="random"
+          description="Demo of the $random: funcut">
+    <echo message="Random String: ${$random:}"/>
+    <echo message="Prefixed Random String ('hello'): ${$random:string?hello}"/>
+    <echo message="Random Integer: ${$random:integer}"/>
+    <echo message="Bounded Random Integer (0-100]: ${$random:int?100}"/>
+    <echo message="Random Long: ${$random:long}"/>
+    <echo message="Random Boolean: ${$random:boolean}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$newrefid:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="newrefid"
+          description="Demo of the $newrefid: funcut">
+    <echo message="New refid: ${$newrefid:}"/>
+    <echo message="Another refid: ${$newrefid:}"/>
+    <echo message="Prefixed refid ('hello'): ${$newrefid:hello}"/>
+    <echo message="Uppercased refid: ${$newrefid:aeiou|$uppercase:}"/>
+    <echo message="Temp refid: ${$newrefid:junk?nextid}"/>
+    <echo message="  -> The variable(nextid): ${$var:nextid}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$isdefined:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="isdefined"
+          description="Demo of the $isdefined: funcut">
+    <echo message="Defined(ant.file): ${$isdefined:ant.file?property}"/>
+    <echo message="Defined(no-such-ref): ${$isdefined:nosuchref?reference}"/>
+    <property name="blankityblank" value="  "/>
+    <echo message="Defined([:space:]): ${$isdefined:${blankityblank}}"/>
+    <echo message="Defined([:malformed:]): ${$isdefined:a${bogus}value}"/>
+    <assign name="bogus" value="${bogus}" scope="project"/>
+    <echo message="Defined([:badref:]): ${$ref:bogus|$isdefined:}"/>
+    <assign name="blankityblank" value="  " scope="project"/>
+    <echo message="Defined([:space:]): ${$ref:blankityblank|$isdefined:}"/>
+    <echo message="Defined(helloworld): ${$isdefined:helloworld}"/>
+    <echo message="Defined(): ${$isdefined:}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$istype:' and '$istask:' function shortcuts.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="typecheck"
+          description="Demo of the $typecheck: funcuts">
+    <echo message="IsType(fileset): ${$istype:fileset}"/>
+    <echo message="IsTask(property): ${$istask:property}"/>
+    <echo message="IsType(property): ${$istype:property}"/>
+    <echo message="IsType(nosuchtype): ${$istype:nosuchtype}"/>
+    <echo message="IsTask(nosuchtask): ${$istask:nosuchtask}"/>
+  </target>
+
+
+  <!--
+    | The demo of our '$list:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="list"
+          description="Demo of the $list: funcut">
+	<strings id="abcstrings">
+	  <string value="a"/>
+	  <string value="bB"/>
+	  <string value="c"/>
+	</strings>
+	<property name="abcptr" value="abcstrings"/>
+
+	<echo message="Test StringList Is: ${$list:abcstrings?dump}"/>
+
+	<echo message="abcstrings has ${$list:abcstrings?size} items"/>
+	<echo message="item[1] is '${$list:${abcptr}?1}'"/>
+	<echo message="item[0] is '${$list:${abcptr}?0}'"/>
+	<echo message="list:abcstrings?99: ${$list:abcstrings?99}"/>
+	<echo message="abcstrings(||) is: ${$list:abcstrings?values,,||}"/>
+
+    <property name="listlist" value="AA,BB,CC,DD"/>
+    <echo message="Inlined StringList Is: ${listlist}"/>
+ 
+    <echo message="inlined list has ${$list:${listlist}?size} items"/>
+    <echo message="inlined list[3] is '${$list:${listlist}?3}'"/>
+    <echo message="'x,y,z'[0] is '${$list:x,y,z?0}'"/>
+    <assign name="x,y,z" value="ERROR" scope="project"/>
+    <echo message="'x,y,z'[0] is '${$list:[x,y,z]?0}'"/>
+    
+    <property name="xyz" value="x,y,z"/>
+    <echo message="sizeof(empty-list) is ${$list:?size}"/>
+    <echo message="'x,y,z'(--) is: ${$list:[${xyz}]?values,,--}"/>
+  </target>
+
+
+  <!--
+    | The demo for our '$map:' function shortcut
+    | @since JWare/AntX 0.5
+    -->
+  <target name="map"
+          description="Demo of the $map: funcut">
+	  <macrodef name="maptrial">
+	    <attribute name="M"/>
+	    <sequential>
+        <property name="@{M}-id" value="@{M}"/>
+        <echo message="sizeof(@{M}): ${$map:@{M}?size}"/>
+        <echo message="isempty(@{M}): ${$map:@{M}?isempty}"/>
+        <echo message="keys(@{M}): ${$map:@{M}?keys}"/>
+        <echo message="keys(@{M},;): ${$map:@{M}?keys,,;}"/>
+        <echo message="values(@{M}): ${$map:${@{M}-id}?values}"/>
+        <echo message="DUMP(@{M}): ${$map:@{M}}"/>
+	    </sequential>
+	  </macrodef>
+	  <macrodef name="copytools">
+	    <attribute name="M"/>
+	    <attribute name="name"/>
+	    <sequential>
+        <createtask name="duptools">
+          <parameters id="@{name}"/>
+        </createtask>
+        <doforeach i="key" list="${$map:@{M}?keys}">
+          <altertask name="duptools" resolveproperties="yes">
+            <property name="${key}" value="${$map:@{M}?${key}}"/>
+          </altertask>
+        </doforeach>
+        <performtask name="duptools"/> 
+	    </sequential>
+	  </macrodef>
+	  <parameters id="emptymap"/>
+    <parameters id="tools">
+      <property name="junit" value="JavaUnit"/>
+      <property name="emma" value="EMMA"/>
+      <property name="pmd" value="PMD"/>
+      <property name="findbugs" value="FindBugs"/>
+      <property name="jdepend" value="jDepend"/>
+    </parameters>
+    <maptrial M="tools"/>
+    <echo message="tools->emma: ${$map:tools?emma}"/>
+    <echo message="tools->jdepend: ${$map:tools?jdepend,,--}"/>
+    <maptrial M="emptymap"/>
+    <copytools M="tools" name="toolscopy"/>
+    <maptrial M="toolscopy"/>
+  </target>
+
+
+
+  <!--
+    | The demo for our '$shorten:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="shorten"
+          description="Demo of the $shorten: funcut">
+    <echo message="ant.file(l): ${$shorten:${ant.file}}"/>
+    <echo message="ant.file(r): ${$property:ant.file|$shorten:?32,,right}"/>
+    <echo message="$TMP: ${$shorten:${TMP.dir}?,,left,,==>}"/>
+  </target>
+
+
+
+  <!--
+    | The demo for our '$truncate:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="truncate"
+          description="Demo of the $truncate: funcut">
+    <echo message="ant.file(r): ${$truncate:${ant.file}}"/>
+    <echo message="ant.file(l,17): ${$property:ant.file|$truncate:?17,,left}"/>
+    <echo message="abcdefghij's,10: ${$truncate:AbCdEfGhIjKlMnOpQrStUvWxYz:?10|$lowercase:}"/>
+  </target>
+
+
+
+  <!--
+    | The demo for our '$basename:' function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+  <target name="basename"
+          description="Demo of the $basename: funcut">
+    <echo message="ant.file(1): ${$basename:${ant.file}}"/>
+    <echo message="ant.file(2): ${$basename:${ant.file}?xml}"/>
+    <echo message="basedir: ${$basename:${basedir}}"/>
+  </target>
+
+
+
+  <!--
+    | The demo for our '$dirname:' function shortcut.
+    | @since JWare/AntXtras 2.1.0
+    -->
+  <target name="dirname"
+          description="Demo of the $dirname: funcut">
+    <echo message="ant.file: ${$dirname:${ant.file}}"/>
+    <echo message="basedir: ${$dirname:${basedir}}"/>
+  </target>
+
+
+
+  <!--
+    | The demo for our '$loadfile:' function shortcut.
+    | @since JWare/AntXtras 3.0.0
+    -->
+  <target name="loadfile"
+          description="Demo of the $loadfile: funcut">
+    <pathproperty name="versionfile" value="${root.d}/VERSION.txt"/>
+    <do true="${$filenotempty:${versionfile}}">
+      <assign var="versiontext" value="${$loadfile:${versionfile}}"/>
+      <echo message="${line.separator}${$var:versiontext}"/>
+      <unassign var="versiontext"/>
+    </do>
+  </target>
+
+
+
+  <!--
+    | The demo for our various datetime function shortcuts.
+    | @since JWare/AntX 0.5
+    | @since JWare/AntXtras 3.0.0 added call to $isomillis:
+    -->
+  <target name="datetime"
+          description="Demo of the various datetime funcuts">
+    <echo message="The Current Time Is: ${$time:now}"/>
+    <echo message="The Current Short DateTime Is: ${$shortdatetime:now}"/>
+    <echo message="The Current GMT DateTime Is: ${$gmtdatetime:now}"/>
+    <echo message="The Current ChangeLog Date Is: ${$changelogdate:now}"/>
+    <echo message="The Current ISO Milliseconds Is: ${$isomillis:}"/>
+    <echo message="The Current ISO DateTime Is: ${$isodatetime:now}"/>
+    <echo message="A custom datetime String Is: ${$tstamp:?hh 'o''clock' a, zzzz}"/>
+    <echo message="A duration value: ${$duration:10000000}"/>
+    <echo message="Some milliseconds(3m+279s+123ms): ${$millis:3m+279s+123ms}"/>
+  </target>
+
+
+
+  <!--
+    | The demo for our '$password:'function shortcut.
+    | @since JWare/AntX 0.5
+    -->
+
+  <target name="password"
+          description="Demo of the $password: funcut">
+    <newtempfile prefix="PWF" suffix=".seekrits" 
+        pathproperty="jware.antxtras.defaults.passwordfile">
+      <line value="frank=achoo!"/>
+      <line value="susan=bleech.."/>
+    </newtempfile>
+
+    <echo message="(1) Frank's password: ${$password:frank}"/>
+    <echo message="(1) Susan's password: ${$password:susan}"/>
+
+    <datadef name="passwords">
+      <parameters>
+        <parameter name="jennifer" value="happyfunbags"/>
+        <parameter name="frank" value="ACHOO!"/>
+      </parameters>
+    </datadef>
+
+    <copyreference refid="passwords" torefid="run.passwords"/>
+
+    <overlay defaults.password="anonymoose">
+      <echo message="(2) Default Password Is: ${defaults.password}"/>
+      <echo message="(2) Frank's NEW password: ${$password:frank}"/>
+      <echo message="(2) Jennifer's password: ${$password:jennifer}"/>
+      <echo message="(2) Susan's password: ${$password:susan}"/> <!-- UNDEFINED (default) -->
+    </overlay>
+
+    <copyproperty name="user.pwfile" value="${user.home}/.ant/.private/run.passwords"
+        transform="ospath"/>
+    <tally trueproperty="pwfile.exists">
+      <filenotempty path="${user.pwfile}"/>
+    </tally>
+
+    <unassign reference="run.passwords"/>
+
+    <do if="pwfile.exists">
+      <echo message="User password file: ${$ospath:${user.home}/.ant/.private/run.passwords} FOUND"/>
+      <locals name="pwfile.property">
+        <property name="jware.antxtras.defaults.passwordfile"/>
+      </locals>
+      <isolate block="pwfile.property">
+        <echo message="(3) Frank's password: ${$password:frank}"/>
+        <echo message="(3) NightlyBuild's password: ${$password:nightlybuild}"/> <!-- UNDEFINED -->
+      </isolate>
+    </do>
+    <echo message="(4) Frank's OLD password: ${$password:frank}"/>
+  </target>
+  
+
+  <!--
+    | The demo for our '$transform:' function shortcut. DO THIS LAST.
+    | @since JWare/AntX 0.5
+    | @since JWare/AntXtras 3.0.0 removed obsolete datetime related transforms
+    -->
+  <target name="transform" depends="begin"
+          description="Demo of the $transform: funcuts">
+    <property name="sentence" value="  Bucket Of Trash "/>
+    
+    <echo message="The trimmed sentence:'${$trim:${sentence}}'"/>
+    <echo message="The stripped sentence:'${$stripws: Buc ket O f  Trash }'"/>
+
+    <!-- -->
+    <echo message="lowercased MixEdCasE: ${$lowercase:MixEdCasE}"/>
+    <echo message="UPPERCASED MixEdCasE: ${$uppercase:MixEdCasE}"/>
+    <echo message="UPPERCASED sentence:'${$stripws: Buc ket O f  Trash |$uppercase:}'"/>
+    
+    <echo message="ospathurl(TMP.dir): ${$ospathurl:${TMP.dir}}"/>
+    <echo message="ospath(TMP.url): ${$ospath:${TMP.url}}"/>
+
+    <!-- -->
+    <echo message="decimal(1): ${$decimal:1}"/>
+    <echo message="decimal(0): ${$decimal:0}"/>
+    <echo message="decimal(2.5): ${$decimal:2.5}"/>
+    <echo message="decimal(0.0101): ${$decimal:0.0101}"/>
+    <echo message="decimal(PI=3.1415926535): ${$decimal:3.1415926535}"/>
+
+    <!-- -->
+    <echo message="Transform decimal(garbage): ${$transform:garbageIN?decimal}"/>
+    <echo message="Transform ospathurl(garbage): ${$pathurl:garbageIN}"/>
+ 
+
+    <!-- -->
+    <assign var="delta" op="-now" fromvariable="start" copyproperty="delta"/>
+    <echo message="We Lasted: ${$var:delta|$duration:}"/>
+  </target>
+
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+
+  <!--
+    | Main entry points. Calls all the AntXtras function shortcut demos.
+    | Note that the depends lists ordering is important for target='main'.
+    | @since JWare/AntX 0.5
+    | @since JWare/AntXtras 3.0.0 expanded for newer funcuts too
+    -->
+  <target name="cat:info"
+          description="[**] Calls all fixture info funcut demos"
+          depends="os,vendorinfo,fixture,defaults,password,list,map"/>
+  
+  <target name="cat:condition"
+          description="[**] Calls all condition funcut demos"
+          depends="typecheck,truefalse,iszero,not,isdefined"/>
+ 
+  <target name="cat:filesystem"
+          description="[**] Calls all filesystem funcut demos"
+          depends="basename,dirname,loadfile"/>
+
+  <target name="cat:general"
+          description="[**] Calls all utility funcut demos"
+          depends="begin,random,newrefid,shorten,truncate,datetime,transform"/>
+
+  <target name="main"
+          description="[**] Calls ALL builtin funcut demos."
+          depends="begin,cat:info,cat:condition,cat:general,cat:filesystem"/>
+
+
+  <target name="tryit" depends="begin">
+    <macrodef name="writefinished">
+       <attribute name="op"/>
+       <attribute name="started"/>
+       <sequential>
+          <assign var="_whenfinished" op="-now" fromvariable="@{started}"/>
+          <echo>
+End Hour: ${$tstamp:now?hh 'o''clock' a, zzzz}
+Duration: ${$var:_whenfinished|$duration:}
+          </echo>
+       </sequential>
+    </macrodef>
+    <sleep seconds="2"/>
+    <writefinished op="test" started="start"/>
+  </target>
+
+</project>
+
+<!-- $Id: antxtras-funcuts-demo.xml 1226 2011-08-13 19:42:32Z ssmc $ -->

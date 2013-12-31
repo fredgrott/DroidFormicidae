@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<!--
+   |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+   | Do-nothing project that ensures Ant can locate and load JWare/AntXtras |
+   | tasks and types. Expects to be run from <ANTXTRAS_HOME>/etc directory. |
+   |                                                                        |
+   | (c) 2003-2012 Sandbox Software MC (SSMC). All rights reserved.         |
+   |________________________________________________________________________|
+   -->
+
+<project name="first-install" xmlns:oja="jwaresoftware.antxtras" 
+         basedir="." default="check-core">
+ 
+  <description>Verifies a binary AntXtras installation re: our How-Tos</description>
+
+  <!-- To locate AntXtras distribution .jar files per type of load -->
+  <dirname property="root.d" file="${basedir}"/>
+
+
+  <!-- 
+    || 1. Loading core antlib into the standard 'blank' Ant namespace
+    -->
+  <target name="check-core" unless="INITED"
+    description="Checks can load core AntXtras antlib into standard namespace">
+
+    <taskdef onerror="failall"
+      resource="org/jwaresoftware/antxtras/install/antlib.xml">
+      <classpath>
+        <fileset dir="${root.d}/lib">
+          <include name="jw-antxtras.jar"/>
+        </fileset>
+      </classpath>
+    </taskdef>
+
+    <vendorinfo name="antxtras"/>
+    <show message="RELEASE: ${antxtras.build.label}"/>
+    <property name="INITED" value="yes"/>
+  </target>
+
+
+  <!-- 
+    || 2. Loading all antlibs into the standard 'blank' Ant namespace
+    -->
+  <target name="check-advanced" unless="INITED"
+    description="Checks can load all AntXtras antlibs into standard namespace">
+
+    <taskdef onerror="failall"
+      resource="org/jwaresoftware/antxtras/install/antlib-advanced.xml">
+      <classpath>
+        <fileset dir="${root.d}/lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </taskdef>
+
+    <show message="RELEASE: ${$vendorinfo:antxtras?label}"/>
+    <property name="INITED" value="yes"/>
+  </target>
+
+
+  <!-- 
+    || 3. Loading core antlib into its own Ant namespace 'oja'
+    -->
+  <target name="check-ns" unless="INITED"
+    description="Checks can load core AntXtras antlib into own 'oja' namespace">
+
+    <taskdef onerror="failall" 
+      uri="jwaresoftware.antxtras"
+      resource="org/jwaresoftware/antxtras/install/antlib.xml">
+      <classpath>
+        <fileset dir="${root.d}/lib">
+          <include name="jw-antxtras.jar"/>
+        </fileset>
+      </classpath>
+    </taskdef>
+
+    <oja:vendorinfo/>
+    <oja:show message="RELEASE: ${antxtras.build.label}"/>
+    <property name="INITED" value="yes"/>
+  </target>
+
+</project>
+
+<!-- $Id: antxtras-install-check.xml 1390 2012-07-28 19:38:08Z ssmc $ -->

@@ -1,0 +1,10 @@
+page.title=Source
+walkthru=0
+header.hide=0
+
+@jd:body
+
+<p>The source for this project can be found at the bitbucket repo. You can of course 
+fork that not only from bitbucket but also from many other git-hosting platforms 
+that support that such as github.</p>
+<p>If you do fork, please give credit and link back and thank you for doing so.</p>

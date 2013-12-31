@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+   |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+   | Do-nothing project that ensures Ant can locate and load JWare/Log4Ant. |
+   | Expects to be run from <LOG4ANT_HOME>/etc directory.                   |
+   |                                                                        |
+   | (c) 2009-2012 Sandbox Software MC. All rights reserved.                |
+   |________________________________________________________________________|
+   -->
+
+<project name="first-install" basedir="." default="check-log4ant"
+         xmlns:oja="jwaresoftware.antxtras" 
+         xmlns:emit="jwaresoftware.log4ant">
+
+  <description>Verify a '_withdeps' Log4Ant installation</description>
+
+  <!-- Location of Log4Ant antlib and thirdparty files -->
+  <dirname property="root.d" file="${basedir}"/>
+  <path id="jware.path">
+    <fileset dir="${root.d}/dep">
+      <include name="*/lib/*.jar"/>
+    </fileset>
+    <fileset dir="${root.d}/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement 
+      location="${root.d}/etc"/>
+  </path>
+
+  <!-- 
+    || 1. Loading Log4Ant antlib into the 'emit' Ant namespace
+    -->
+  <target name="check-log4ant" unless="INITED"
+    description="Load Log4Ant antlib into Ant">
+
+    <taskdef uri="jwaresoftware.log4ant"
+      resource="org/jwaresoftware/log4ant/antlib.xml"
+      classpathref="jware.path"/>
+      
+    <emit:libcheck/>
+    <emit:show message="${log4ant.label}"/> 
+    <emit:show message="${slf4j.label}"/>
+    <emit:show message="${slf4j-impl.label}"/>
+
+    <property name="INITED" value="yes"/>
+  </target>
+
+
+  <!-- 
+    || 2. Loading Log4Ant antlib into the 'emit' Ant namespace
+    ||    and AntXtras into the 'oja' namespace.
+    -->
+  <target name="check-antxtras" unless="INITED"
+    description="Load AntXtras and Log4Ant antlibs into Ant">
+
+    <taskdef uri="jwaresoftware.antxtras"
+         resource="org/jwaresoftware/antxtras/install/antlib.xml"
+         classpathref="jware.path"
+         loaderref="jware.classloader"/>
+
+    <taskdef uri="jwaresoftware.log4ant"
+         resource="org/jwaresoftware/log4ant/install/antlib.xml"
+         loaderref="jware.classloader"/>
+
+    <oja:vendorinfo name="antxtras"/>
+    <oja:show message="AntXtras: ${antxtras.build.label}"/>
+
+    <emit:libcheck/>
+    <emit:show message="${log4ant.label}"/> 
+    <emit:show message="${slf4j.label}"/>
+    <emit:show message="${slf4j-impl.label}"/>
+
+    <property name="INITED" value="yes"/>
+  </target>
+
+</project>
+
+<!-- $Id: log4ant-install-check.xml 1358 2012-07-22 23:01:37Z ssmc $ -->

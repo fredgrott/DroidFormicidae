@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================================= -->
+<!--                                                                         -->
+<!-- Ant script to generate library and javadocs from public sources (.zip). -->
+<!--                                                                         -->
+<!-- ======================================================================= -->
+
+<project name="EZ Build" default="package">
+  <description>Builds public AntXtras-based source distribution</description>
+
+  <!-- ..................................................................... -->
+  <!-- | Required file(s) and directories for any of this to work...       | -->
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+  <dirname property="root" file="${ant.file}"/>
+
+  <!-- // NB: no point in going any further if the 'main' directory missing -->
+  <available property="src.present" file="${root}/../src/main" type="dir"/>
+  <fail unless="src.present" message="Unable to locate main src directory"/>
+  <available property="mf.present" file="${root}/ez-build.mf" type="file"/>
+  <fail unless="mf.present" message="Unable to locate default jar manifest"/>
+
+  <!-- ..................................................................... -->
+  <!-- | Initialize defaults that aren't specified by builder properties   | -->
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+
+  <target name="properties">
+    <property file="${root}/ez-build.properties"/>
+    <tstamp prefix="ez"/>
+
+    <!-- // NB: these defaults ignored if specified in ez-build.properties -->
+    <property name="build.sysclasspath" value="first"/>
+    <property name="src" value="${root}/../src/main"/>
+    <property name="out" value="${root}/../out"/>
+    <property name="lib" value="${out}/lib"/>
+    <property name="api" value="${out}/api"/>
+    <property name="packagename" value="untitled"/>
+    <property name="jarfile" value="${packagename}.jar"/>
+    <property name="manifest" value="${root}/ez-build.mf"/>
+
+    <!-- // NB: specify resource files to be copied into class directories -->
+    <patternset id="copyresources">
+      <exclude name="**/*.java"/>
+      <exclude name="**/*.*,in"/>
+      <exclude name="**/package.html"/>
+      <exclude name="**/overview.html"/>
+      <exclude name="**/doc-files/"/>
+    </patternset>
+  </target>
+
+  <!-- ..................................................................... -->
+  <!-- | Clobbers all generated outputs (classes,jars,javadocs).           | -->
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+  <target name="cleanworkspace" depends="properties"
+          description="o Clobbers all generated artifacts (out)">
+    <delete quiet="true" includeEmptyDirs="true">
+      <fileset dir="${out}"/>
+    </delete>
+  </target>
+
+  <!-- ..................................................................... -->
+  <!-- | Generates all classes and antlib (no tests included by default)   | -->
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+  <target name="antlib" depends="properties"
+          description="o Generates main antlib jar">
+    <mkdir dir="${out}/classes"/>
+
+    <javac srcdir="${src}" destdir="${out}/classes"
+           debug="${javac.isdebug}" deprecation="${javac.isdebug}"
+           optimize="${javac.isopt}" depend="${javac.depend}"
+           source="${javac.source}"
+           includes="**/*.java"
+           excludes="**/doc-files/">
+
+      <!-- UNCOMMENT IF MERGED WITH A '_withdeps' DISTRO.
+      <classpath>
+        <fileset dir="${root}/../dep">
+          <include name="*/lib/*.jar"/>
+        </fileset>
+      </classpath>
+      -->
+
+    </javac>
+
+    <copy filtering="false" todir="${out}/classes">
+      <fileset dir="${src}">
+        <patternset refid="copyresources"/>
+      </fileset>
+    </copy>
+
+    <mkdir dir="${lib}"/>
+    <jar index="true"
+         basedir= "${out}/classes"
+         destfile="${lib}/${jarfile}"
+         manifest="${manifest}"/>
+    
+    <checksum algorithm="SHA" fileext=".sha1" 
+      format="MD5SUM"
+      file="${lib}/${jarfile}"
+      />
+  </target>
+
+  <!-- ..................................................................... -->
+  <!-- | Generates javadocs for all non-test sources (needs at least 1.4)  | -->
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+  <target name="apidocs" depends="properties"
+          description="o Generates javadocs">
+    <mkdir dir="${api}"/>
+
+    <javadoc sourcepath="${src}"
+             destdir="${api}"
+             windowtitle="${javadoc.title}"
+             author="true"
+             version="true"
+             access="${javadoc.access}"
+             use="${javadoc.use}"
+             source="${javac.source}"
+             failonerror="false">
+        <tag name=".safety" scope="types,methods,fields" description="Thread Safety:"/>
+        <tag name=".caveat" scope="types,methods,constructors" description="Caveats:"/>
+        <tag name=".group" enabled="false" scope="types" description="Grouping:"/>
+        <tag name=".stereo" scope="types,fields" description="Stereotype:"/>
+        <tag name=".stereotype" scope="types,fields" description="Stereotype:"/>
+        <tag name=".expects" scope="types,methods,constructors" description="Expects:"/>
+        <tag name=".pattern" scope="types,methods,fields" description="Patterns:"/>
+        <tag name=".side-effect" scope="types,methods,constructors" description="Side Effects:"/>
+        <tag name=".sideeffect" scope="types,methods,constructors" description="Side Effects:"/>
+        <tag name=".bug" enabled="${javadoc.isdebug}" scope="types,methods,constructors" description="Bugs:" />
+        <tag name=".todo" enabled="${javadoc.isdebug}" scope="types,methods,constructors" description="To Do:" />
+        <tag name=".ideas" enabled="false" scope="types" description="Ideas:"/>
+        <tag name=".impl" enabled="${javadoc.isdebug}" scope="types,methods,fields,constructors" description="[Impl Note]:" />
+        <header><![CDATA[${javadoc.header}]]></header>
+        <footer><![CDATA[${javadoc.footer}]]></footer>
+        <doctitle><![CDATA[${javadoc.label}]]></doctitle>
+        <bottom><![CDATA[${javadoc.bottom}]]></bottom>
+    </javadoc>
+  </target>
+
+  <!-- ..................................................................... -->
+  <!-- | Generates source package for all non-test sources                 | -->
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+  <target name="sources" depends="properties"
+          description="o Generates source jar">
+    <basename property="jarbase" file="${jarfile}" suffix=".jar"/>
+    <property name="srcjarfile" value="${jarbase}-sources.jar"/>
+    <jar destfile="${out}/${srcjarfile}" manifest="${manifest}">
+      <zipfileset dir="${src}"/>
+    </jar>
+  </target>
+
+  <!-- ..................................................................... -->
+  <!-- | Does full -*CLEAN*- release ==> clobber all existing first!       | -->
+  <!-- ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ -->
+  <target name="package" depends="properties,cleanworkspace,antlib,apidocs,sources"
+          description="o Generates -*clean*- release of antlib, src, apidocs">
+    <property name="pkg" value="${packagename}.zip"/>
+    <zip destfile="${out}/${pkg}"
+      comment="${ez.TODAY} ${ez.TSTAMP}: ${packagename} (local build)">
+        <zipfileset dir="${out}" prefix="${packagename}">
+          <include name="lib/*"/>
+          <include name="api/**"/>
+          <include name="${srcjarfile}"/>
+        </zipfileset>
+        <zipfileset dir="${root}/.." prefix="${packagename}">
+          <include name="VERSION.txt"/>
+          <include name="LICENS*.txt"/>
+        </zipfileset>
+    </zip>
+    <checksum file="${out}/${pkg}"
+      algorithm="SHA" fileext=".sha1" format="MD5SUM" />
+    <checksum file="${out}/${pkg}"
+      algorithm="MD5" fileext=".md5" format="MD5SUM"/>
+    <echo level="info"
+       message="*** PACKAGE: ${pkg} and .sha1 hash files"/>
+  </target>
+
+</project>
+
+<!-- $Id: ez-build.xml 1226 2011-08-13 19:42:32Z ssmc $ -->

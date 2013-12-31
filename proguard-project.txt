@@ -18,3 +18,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+# if your project uses LogbackAndroid as an application and debug logger,
+# uncomment these following lines
+# -keep public class org.slf4j.** { *; }
+# -keep public class ch.** { *; }
+
+# If your project uses GreenRobot's EventBus, uncomment the following lines
+# -keepclassmembers class ** {
+#    public void onEvent*(**);
+# }

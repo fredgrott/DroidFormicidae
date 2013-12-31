@@ -1,0 +1,50 @@
+page.title=Project Support
+fullpage=1
+@jd:body
+
+<div class="wrap" style="width:940px;">
+
+  <h1>Project Support Resources</h1>
+
+    <div style="margin: 20px 0 0;">
+
+  <div class="col-8" style="margin-left:0">
+    <h3 style="font-size: 14px;line-height: 21px;color: #555;text-transform: uppercase;border-bottom: 1px solid #CCC;margin: 0 0 20px;">Code-Level Support</h3>
+    
+<h5>Repo</h5>
+<p style="color:#888">
+
+<a href="https://github.com/shareme/GWSOmega/issues">issue tracker</a> submission form<br />
+
+</p>
+
+
+<h5>Send Feedback</h5>
+<p>
+  <a href="https://plus.google.com/114301140286672625486">Send feedback via my G+ about page form</a><br />
+  
+  
+  </div>
+
+  
+  
+  <div class="col-8" style="margin-right:0">
+    <h3 style="font-size: 14px;line-height: 21px;color: #555;text-transform:
+uppercase;border-bottom: 1px solid #CCC;margin: 0 0 20px;">End User Support</h3>
+<h5>Help center</h5>
+<p style="color:#888">
+  <a href="https://github.com/shareme/GWSOmega/issues">Issues</a><br />
+  <a href="https://github.com/shareme/GWSOmega/wiki">Wiki</a><br />
+</p>
+
+
+
+
+
+
+
+ 
+
+
+</div>
+</div>
